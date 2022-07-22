@@ -35,7 +35,7 @@ public class SinkToHiveFunction extends RichSinkFunction<User> {
         Class.forName(DRIVER);
         connection = DriverManager.getConnection(URL, USER, PASSWORD);
         System.out.println("hive jdbc connection : " + connection);
-        String sql = "insert into hive_db.user_tbl(uid, name, code) values(?, ?, ?);";
+        String sql = "insert into hive_db.user_tbl(uid, name, code) values(?, ?, ?)";
         ps = this.connection.prepareStatement(sql);
     }
 

@@ -3,25 +3,16 @@ package com.tbds.rison.app;
 import com.alibaba.fastjson.JSON;
 import com.tbds.rison.bean.User;
 import com.tbds.rison.func.SinkToHiveFunction;
-import com.tbds.rison.trigger.UserTrigger;
 import com.tbds.rison.utils.GsonUtil;
 import com.tbds.rison.utils.KafkaUtil;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.shaded.guava18.com.google.common.collect.Lists;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.functions.windowing.AllWindowFunction;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -35,6 +26,7 @@ public class Kafka2Hive {
     private static String TOPIC = "test_rison";
     private static String KAFKA_SERVERS = "tbds-172-16-16-142:6669,tbds-172-16-16-87:6669,tbds-172-16-16-91:6669";
     private static String GROUP_ID = "test_group_id" + System.currentTimeMillis();
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
@@ -76,3 +68,7 @@ public class Kafka2Hive {
         env.execute("kafka2Hive");
     }
 }
+/*
+export KAFKA_OPTS='-Djava.security.auth.login.config=/etc/kafka/conf/kafka-client-jaas.conf';
+bin/kafka-console-producer.sh --bootstrap-server tbds-172-16-16-142:6669,tbds-172-16-16-87:6669,tbds-172-16-16-91:6669 --topic test_rison --producer.config /tmp/kafka-client-jaas.properties
+ */
